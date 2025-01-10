@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 import scrollTo from 'scroll-to'
 import TodoCreator from '~/components/TodoCreator'
 import TodoItem from '~/components/TodoItem'
@@ -74,6 +75,16 @@ export default {
     TodoItem
   },
   computed: {
+    // Helpers
+    ...mapState('todoApp', [
+      'db', 
+      'todos'
+    ]),
+    ...mapGetters('todoApp', [
+      'total',
+      'activeCount',
+      'compltedCount'
+    ]),
     filteredTodos () {
       switch (this.$route.params.id) {
         case 'all':
