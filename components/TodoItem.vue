@@ -128,11 +128,10 @@ export default {
         todo: this.todo,
         value
       })
-
     },
     deleteTodo () {
       // this.$emit('delete-todo', this.todo)
-      this.$store. dispatch('todoApp/deleteTodo', this.todo)
+      this.$store.dispatch('todoApp/deleteTodo', this.todo)
     }
   }
 }

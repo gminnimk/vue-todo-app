@@ -77,7 +77,7 @@ export default {
   computed: {
     // Helpers
     ...mapState('todoApp', [
-      'db', 
+      'db',
       'todos'
     ]),
     ...mapGetters('todoApp', [
