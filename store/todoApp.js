@@ -19,8 +19,17 @@ export default {
         assignDB (state, db) {
             state.db = db
         },
+        createDB (state, newTodo) { 
+            state.db
+              .get('todos') // lodash
+              .push(newTodo) // lodash
+              .write() // lowdb
+        },
         assignTodos (state, todos) {
             state.todos = todos
+        },
+        pushTodo (state, newTodo) {
+            state.todos.push(newTodo)
         }
     },
     actions: {
@@ -52,5 +61,20 @@ export default {
                 .write() // 데이터 저장
             }
           },
+          createTodo ({ state, commit }, title) {
+            const newTodo = {
+              id: cryptoRandomString({ length: 10 }),
+              title,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              done: false
+            }
+      
+            // Create DB
+            commit('createDB', newTodo)
+      
+            // Craete Client
+            commit('pushTodo', newTodo)
+          }
     }
 }
