@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import scrollTo from 'scroll-to'
 import TodoCreator from '~/components/TodoCreator'
 import TodoItem from '~/components/TodoItem'
@@ -107,12 +107,13 @@ export default {
   },
   created () {
     this.initDB()
-    this.$store.dispatch('todoApp/updateTodo', {
-      todo,
-      value
-    })
   },
   methods: {
+    ...mapActions('todoApp', [
+      'initDB',
+      'completeAll',
+      'clearComplted'
+    ]),
     scrollToTop () {
       scrollTo(0, 0, {
         ease: 'linear'
