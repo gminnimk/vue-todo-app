@@ -10,6 +10,16 @@
   </div>
 </template>
 
+<script>
+export default {
+  created () {
+    console.log(this.$router.push('/about'))
+    console.log('Route', this.$route)
+  }
+}
+</script>
+
+
 <style lang='scss'>
   .to-home.router-link-exact-active {
     display: none;
