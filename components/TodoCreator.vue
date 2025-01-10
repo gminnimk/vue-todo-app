@@ -30,8 +30,8 @@ export default {
         return
       }
 
-      // 생성
-      this.$emit('create-todo', this.title)
+      // this.$emit('create-todo', this.title)
+      this.$store.dispatch('todoApp/createTodo', this.title)
       this.title = ''
 
       this.$nextTick(() => {

@@ -56,18 +56,14 @@
       <todo-item
         v-for="todo in filteredTodos"
         :key="todo.id"
-        :todo="todo"
-        @update-todo="updateTodo"
-        @delete-todo="deleteTodo"
-      />
+        :todo="todo" />
     </div>
 
-    <todo-creator class="todo-app__creator" @create-todo="createTodo" />
+    <todo-creator class="todo-app__creator" />
   </div>
 </template>
 
 <script>
-
 import scrollTo from 'scroll-to'
 import TodoCreator from '~/components/TodoCreator'
 import TodoItem from '~/components/TodoItem'
