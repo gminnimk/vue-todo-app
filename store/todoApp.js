@@ -3,6 +3,9 @@ import LocalStorage from 'lowdb/adapters/LocalStorage'
 import cryptoRandomString from 'crypto-random-string'
 import _find from 'lodash/find'
 import _assign from 'lodash/assign'
+import _cloneDeep from 'lodash/cloneDeep'
+import _findIndex from 'lodash/findIndex'
+import _forEachRight from 'lodash/forEachRight'
 
 export default {
     namespaced: true,
@@ -38,6 +41,12 @@ export default {
               .assign(value)
               .write()
         },
+        deleteDB (state, todo) {
+          state.db
+              .get('todos')
+              .find({ id: todo.id })
+              .write()
+        },
         assignTodos (state, todos) {
             state.todos = todos
         },
@@ -46,6 +55,12 @@ export default {
         },
         assignTodo (state, { foundTodo, value }) {
           _assign(foundTodo, value)
+        },
+        deleteTodo (state, foundIndex) {
+          Vue.delete(state.todos, foundIndex)
+        },
+        updateTodo (state, { todo, key, value  }) {
+          todo[key] = value
         }
     },
     actions: {
@@ -99,5 +114,48 @@ export default {
             const foundTodo = _find(state.todos, { id: todo.id })
             commit('assignTodo', { foundTodo, value })
           },
+          deleteTodo ({ state, commit }, todo) {
+            // Delete DB
+            commit('deleteDB', todo)
+      
+            const foundIndex = _findIndex(state.todos, { id: todo.id })
+            // Delete Client
+            commit('deleteTodo', foundIndex)
+          },
+          completeAll (checked) {
+            // DB
+            const newTodos = state.db
+              .get('todos')
+              .forEach((todo) => {
+                todo.done = checked
+              })
+              .write()
+            state.todos = _cloneDeep(newTodos)
+          },
+          completeAll ({ state, commit }, checked) {
+            // DB
+            const newTodos = state.db
+              .get('todos')
+              .forEach((todo) => {
+                // todo.done = checked
+                todo.done = checked
+                commit('updateTodo', {
+                  todo,
+                  key: 'done',
+                  value: checked
+                })
+              })
+              .write()
+            
+            state.todos = _cloneDeep(newTodos)
+          },
+          clearComplted ({ state, dispatch }) {
+            _forEachRight(state.todos, todo => {
+              if (todo.done) { 
+                // this.deleteTodo(todo)
+                dispatch('deleteTodo', todo)
+              }
+            })
+          }
     }
 }
