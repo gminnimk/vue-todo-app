@@ -9,7 +9,11 @@ require('@babel/polyfill')
 module.exports = (env, opts) => {
   const config = {
     resolve: {
-      extensions: ['.vue', '.js'] // 확장자로 명시한 것들을 생략하겠다 라는 의미
+      extensions: ['.vue', '.js'], // 확장자로 명시한 것들을 생략하겠다 라는 의미
+      alias: {
+        '~': path.join(__dirname),
+        'scss': path.join(__dirname, './scss')
+      }
     },
     // 진입점
     entry: {

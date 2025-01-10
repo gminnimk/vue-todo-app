@@ -1,13 +1,3 @@
 <template>
-  <todo-app />
+  <router-view></router-view>
 </template>
-
-<script>
-import TodoApp from './components/TodoApp'
-
-export default {
-  components: {
-    TodoApp
-  }
-}
-</script>
