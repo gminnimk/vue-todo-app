@@ -1,3 +1,9 @@
+import lowdb from 'lowdb'
+import LocalStorage from 'lowdb/adapters/LocalStorage'
+import cryptoRandomString from 'crypto-random-string'
+import _find from 'lodash/find'
+import _assign from 'lodash/assign'
+
 export default {
     namespaced: true,
     state: () => ({
@@ -17,19 +23,29 @@ export default {
     },
     mutations: {
         assignDB (state, db) {
-            state.db = db
+          state.db = db
         },
         createDB (state, newTodo) { 
-            state.db
-              .get('todos') // lodash
-              .push(newTodo) // lodash
-              .write() // lowdb
+          state.db
+            .get('todos') // lodash
+            .push(newTodo) // lodash
+            .write() // lowdb
+        },
+        updateDB (state, { todo, value }) {
+          state.db
+              .get('todos')
+              .find({ id: todo.id })
+              .assign(value)
+              .write()
         },
         assignTodos (state, todos) {
             state.todos = todos
         },
         pushTodo (state, newTodo) {
             state.todos.push(newTodo)
+        },
+        assignTodo (state, { foundTodo, value }) {
+          _assign(foundTodo, value)
         }
     },
     actions: {
@@ -75,6 +91,13 @@ export default {
       
             // Craete Client
             commit('pushTodo', newTodo)
-          }
+          },
+          updateTodo ({ state, commit }, { todo, value }) { 
+            // Update DB
+            commit('updateDB', { todo, value })
+      
+            const foundTodo = _find(state.todos, { id: todo.id })
+            commit('assignTodo', { foundTodo, value })
+          },
     }
 }
