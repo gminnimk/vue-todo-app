@@ -1,5 +1,5 @@
 const path = require('path')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -12,7 +12,7 @@ module.exports = (env, opts) => {
       extensions: ['.vue', '.js'], // 확장자로 명시한 것들을 생략하겠다 라는 의미
       alias: {
         '~': path.join(__dirname),
-        'scss': path.join(__dirname, './scss')
+        scss: path.join(__dirname, './scss')
       }
     },
     // 진입점

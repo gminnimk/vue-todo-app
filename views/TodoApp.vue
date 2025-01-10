@@ -1,49 +1,51 @@
 <template>
   <div class="todo-app">
-
     <div class="todo-app__actions">
       <div class="filters">
-        <router-link
-          to="all"
-          tag="button">
-          모든 항목 ({{ total }})
+        <router-link 
+          to="all" 
+          custom v-slot="{ navigate, isActive }">
+          <button 
+            @click="navigate" 
+            :class="{ 'router-link-active': isActive }">
+            모든 항목 ({{ total }})
+          </button>
         </router-link>
-        <router-link
-          to="active"
-          tag="button">
-          해야 할 항목 ({{ activeCount }})
+        <router-link 
+          to="active" 
+          custom v-slot="{ navigate, isActive }">
+          <button 
+            @click="navigate" 
+            :class="{ 'router-link-active': isActive }">
+            해야 할 항목 ({{ activeCount }})
+          </button>
         </router-link>
-        <router-link
-          to="completed"
-          tag="button">
-          완료된 항목 ({{ completedCount }})
+        <router-link 
+          to="completed" 
+          custom v-slot="{ navigate, isActive }">
+          <button 
+            @click="navigate" 
+            :class="{ 'router-link-active': isActive }">
+            완료된 항목 ({{ completedCount }})
+          </button>
         </router-link>
       </div>
 
       <div class="actions clearfix">
         <div class="float--left">
           <label>
-            <input
-              v-model="allDone"
-              type="checkbox"
-            />
+            <input v-model="allDone" type="checkbox" />
             <span class="icon"><i class="material-icons">done_all</i></span>
           </label>
         </div>
         <div class="float--right clearfix">
-          <button
-            class="btn float--left"
-            @click="scrollToTop">
+          <button class="btn float--left" @click="scrollToTop">
             <i class="material-icons">expand_less</i>
           </button>
-          <button
-            class="btn float--left"
-            @click="scrollToBottom">
+          <button class="btn float--left" @click="scrollToBottom">
             <i class="material-icons">expand_more</i>
           </button>
-          <button
-            class="btn btn--danger float--left"
-            @click="clearCompleted">
+          <button class="btn btn--danger float--left" @click="clearCompleted">
             <i class="material-icons">delete_sweep</i>
           </button>
         </div>
@@ -60,9 +62,7 @@
       />
     </div>
 
-    <todo-creator
-     class="todo-app__creator"
-     @create-todo="createTodo" />
+    <todo-creator class="todo-app__creator" @create-todo="createTodo" />
   </div>
 </template>
 
@@ -98,16 +98,16 @@ export default {
         default:
           return this.todos
         case 'active': // 해야 할 항목
-          return this.todos.filter(todo => !todo.done)
+          return this.todos.filter((todo) => !todo.done)
         case 'completed': // 완료된 항목
-          return this.todos.filter(todo => todo.done)
+          return this.todos.filter((todo) => todo.done)
       }
     },
     total () {
       return this.todos.length
     },
     activeCount () {
-      return this.todos.filter(todo => !todo.done).length
+      return this.todos.filter((todo) => !todo.done).length
     },
     completedCount () {
       return this.total - this.activeCount
@@ -170,20 +170,13 @@ export default {
       this.todos.push(newTodo)
     },
     updateTodo (todo, value) {
-      this.db
-        .get('todos')
-        .find({ id: todo.id })
-        .assign(value)
-        .write()
+      this.db.get('todos').find({ id: todo.id }).assign(value).write()
 
       const foundTodo = _find(this.todos, { id: todo.id })
       _assign(foundTodo, value)
     },
     deleteTodo (todo) {
-      this.db
-        .get('todos')
-        .remove({ id: todo.id })
-        .write()
+      this.db.get('todos').remove({ id: todo.id }).write()
 
       const foundIndex = _findIndex(this.todos, { id: todo.id })
       this.$delete(this.todos, foundIndex)
@@ -192,43 +185,20 @@ export default {
       // DB
       const newTodos = this.db
         .get('todos')
-        .forEach(todo => {
+        .forEach((todo) => {
           todo.done = checked
         })
         .write()
-
-      // Local todos
-      // this.todos.forEach(todo => {
-      //   todo.done = checked
-      // })
       this.todos = _cloneDeep(newTodos)
     },
     clearCompleted () {
-      // this.todos.forEach(todo => {
-      //   if (todo.done) {
-      //     this.deleteTodo(todo)
-      //   }
-      // })
-
-      // this.todos
-      //   .reduce((list, todo, index) => {
-      //     if (todo.done) {
-      //       list.push(index)
-      //     }
-      //     return list
-      //   }, [])
-      //   .reverse()
-      //   .forEach(index => {
-      //     this.deleteTodo(this.todos[index])
-      //   })
-
-      _forEachRight(this.todos, todo => {
+      _forEachRight(this.todos, (todo) => {
         if (todo.done) {
           this.deleteTodo(todo)
         }
       })
     },
-    scrollToTop() {
+    scrollToTop () {
       scrollTo(0, 0, {
         ease: 'linear'
       })
@@ -243,10 +213,10 @@ export default {
 </script>
 
 <style lang="scss">
-  @use "scss/style" as style;
+@use "scss/style" as style;
 
-  .filters button.router-link-active {
-    background: royalblue;
-    color: white;
-  }
+.filters button.router-link-active {
+  background: royalbluE;
+  color: white;
+}
 </style>
