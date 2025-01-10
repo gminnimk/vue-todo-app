@@ -84,13 +84,6 @@ export default {
     TodoCreator,
     TodoItem
   },
-  data () {
-    return {
-      db: null,
-      todos: [],
-      filter: 'all'
-    }
-  },
   computed: {
     filteredTodos () {
       switch (this.$route.params.id) {
@@ -102,15 +95,6 @@ export default {
         case 'completed': // 완료된 항목
           return this.todos.filter((todo) => todo.done)
       }
-    },
-    total () {
-      return this.todos.length
-    },
-    activeCount () {
-      return this.todos.filter((todo) => !todo.done).length
-    },
-    completedCount () {
-      return this.total - this.activeCount
     },
     allDone: {
       get () {
@@ -125,32 +109,6 @@ export default {
     this.initDB()
   },
   methods: {
-    initDB () {
-      const adapter = new LocalStorage('todo-app')
-      this.db = lowdb(adapter)
-
-      console.log(this.db)
-
-      const hasTodos = this.db.has('todos').value()
-
-      if (hasTodos) {
-        this.todos = _cloneDeep(this.db.getState().todos)
-      } else {
-        // Local DB 초기화
-        this.db
-          .defaults({
-            todos: []
-          })
-          .write()
-      }
-
-      // 기본 데이터 초기화
-      if (!this.db.has('todos').value()) {
-        this.db
-          .set('todos', []) // 빈 배열로 초기화
-          .write() // 데이터 저장
-      }
-    },
     createTodo (title) {
       const newTodo = {
         id: cryptoRandomString({ length: 10 }),
