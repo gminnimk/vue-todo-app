@@ -2,29 +2,29 @@
   <div class="todo-app">
     <div class="todo-app__actions">
       <div class="filters">
-        <router-link 
-          to="all" 
+        <router-link
+          to="all"
           custom v-slot="{ navigate, isActive }">
-          <button 
-            @click="navigate" 
+          <button
+            @click="navigate"
             :class="{ 'router-link-active': isActive }">
             모든 항목 ({{ total }})
           </button>
         </router-link>
-        <router-link 
-          to="active" 
+        <router-link
+          to="active"
           custom v-slot="{ navigate, isActive }">
-          <button 
-            @click="navigate" 
+          <button
+            @click="navigate"
             :class="{ 'router-link-active': isActive }">
             해야 할 항목 ({{ activeCount }})
           </button>
         </router-link>
-        <router-link 
-          to="completed" 
+        <router-link
+          to="completed"
           custom v-slot="{ navigate, isActive }">
-          <button 
-            @click="navigate" 
+          <button
+            @click="navigate"
             :class="{ 'router-link-active': isActive }">
             완료된 항목 ({{ completedCount }})
           </button>

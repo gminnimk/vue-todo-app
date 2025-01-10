@@ -5,7 +5,7 @@
       class="to-home">
       <i class="material-icons">home</i>
       </router-link>
- 
+
     <router-view></router-view>
   </div>
 </template>
@@ -18,7 +18,6 @@ export default {
   }
 }
 </script>
-
 
 <style lang='scss'>
   .to-home.router-link-exact-active {
