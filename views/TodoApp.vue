@@ -83,19 +83,9 @@ export default {
     ...mapGetters('todoApp', [
       'total',
       'activeCount',
-      'compltedCount'
+      'completedCount',
+      'filteredTodos'
     ]),
-    filteredTodos () {
-      switch (this.$route.params.id) {
-        case 'all':
-        default:
-          return this.todos
-        case 'active': // 해야 할 항목
-          return this.todos.filter((todo) => !todo.done)
-        case 'completed': // 완료된 항목
-          return this.todos.filter((todo) => todo.done)
-      }
-    },
     allDone: {
       get () {
         return this.total === this.completedCount && this.total > 0
@@ -105,14 +95,22 @@ export default {
       }
     }
   },
+  watch: {
+    $route () {
+      this.$store.commit('todoApp/updateFilter', this.$route.params.id)
+    }
+  },
   created () {
     this.initDB()
   },
   methods: {
+    ...mapMutations('todoApp', [
+      'updateFilter'
+    ]),
     ...mapActions('todoApp', [
       'initDB',
       'completeAll',
-      'clearComplted'
+      'clearCompleted'
     ]),
     scrollToTop () {
       scrollTo(0, 0, {
@@ -132,7 +130,7 @@ export default {
 @use "scss/style" as style;
 
 .filters button.router-link-active {
-  background: royalbluE;
+  background: royalblue;
   color: white;
 }
 </style>

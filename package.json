@@ -59,6 +59,7 @@
     "lodash": "^4.17.21",
     "lowdb": "^1.0.0",
     "scroll-to": "^0.0.2",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "vuex": "^4.0.2"
   }
 }

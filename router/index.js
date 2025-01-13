@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router' // Vue 3 Router 방식
-import Home from '~/views/Home'
-import About from '~/views/About'
+import Home from '~/views/HomePage'
+import About from '~/views/AboutPage'
 import TodoApp from '~/views/TodoApp'
 
 const routes = [

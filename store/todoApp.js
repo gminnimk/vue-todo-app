@@ -56,7 +56,7 @@ export default {
     deleteDB (state, todo) {
       state.db
         .get('todos')
-        .find({ id: todo.id })
+        .remove({ id: todo.id })
         .write()
     },
     assignTodos (state, todos) {
@@ -69,7 +69,7 @@ export default {
       _assign(foundTodo, value)
     },
     deleteTodo (state, foundIndex) {
-      Vue.delete(state.todos, foundIndex)
+      state.todos.splice(foundIndex, 1)
     },
     updateTodo (state, { todo, key, value }) {
       todo[key] = value
@@ -81,18 +81,13 @@ export default {
   actions: {
     initDB ({ state, commit }) {
       const adapter = new LocalStorage('todo-app')
-      // state.db = lowdb(adapter)
       commit('assignDB', lowdb(adapter))
-
-      console.log(state.db)
 
       const hasTodos = state.db.has('todos').value()
 
       if (hasTodos) {
-        // state.todos = _cloneDeep(state.db.getState().todos)
         commit('assignTodos', _cloneDeep(state.db.getState().todos))
       } else {
-        // Local DB 초기화
         state.db
           .defaults({
             todos: []
@@ -100,12 +95,14 @@ export default {
           .write()
       }
 
-      // 기본 데이터 초기화
       if (!state.db.has('todos').value()) {
         state.db
           .set('todos', []) // 빈 배열로 초기화
           .write() // 데이터 저장
       }
+    },
+    updateFilter ({ commit }, filter) {
+      commit('updateFilter', filter)
     },
     createTodo ({ state, commit }, title) {
       const newTodo = {
@@ -119,7 +116,7 @@ export default {
       // Create DB
       commit('createDB', newTodo)
 
-      // Craete Client
+      // Create Client
       commit('pushTodo', newTodo)
     },
     updateTodo ({ state, commit }, { todo, value }) {
@@ -137,23 +134,11 @@ export default {
       // Delete Client
       commit('deleteTodo', foundIndex)
     },
-    completeAll (checked) {
-      // DB
-      const newTodos = state.db
-        .get('todos')
-        .forEach((todo) => {
-          todo.done = checked
-        })
-        .write()
-      state.todos = _cloneDeep(newTodos)
-    },
     completeAll ({ state, commit }, checked) {
-      // DB
+      // DB 업데이트
       const newTodos = state.db
         .get('todos')
-        .forEach((todo) => {
-          // todo.done = checked
-          todo.done = checked
+        .forEach(todo => {
           commit('updateTodo', {
             todo,
             key: 'done',
@@ -162,12 +147,11 @@ export default {
         })
         .write()
 
-      state.todos = _cloneDeep(newTodos)
+      commit('assignTodos', _cloneDeep(newTodos))
     },
-    clearComplted ({ state, dispatch }) {
+    clearCompleted ({ state, dispatch }) {
       _forEachRight(state.todos, todo => {
         if (todo.done) {
-          // this.deleteTodo(todo)
           dispatch('deleteTodo', todo)
         }
       })

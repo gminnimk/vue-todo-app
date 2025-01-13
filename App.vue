@@ -13,7 +13,7 @@
 <script>
 export default {
   created () {
-    console.log(this.$router.push('/about'))
+    console.log(this.$router.push('/'))
     console.log('Route', this.$route)
   }
 }
